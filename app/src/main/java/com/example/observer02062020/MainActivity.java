@@ -1,6 +1,7 @@
 package com.example.observer02062020;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.OnLifecycleEvent;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -20,8 +21,12 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
 //        });
-
-        inSoChinhPhuong();
+        inso(new OnListenValue() {
+            @Override
+            public boolean isResultCondition(int value) {
+                return value % 2 == 0;
+            }
+        });
     }
 
     // Chạy vòng lặp 1 - 100
@@ -51,6 +56,15 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+    private void inso(OnListenValue resultCondiTion){
+        for (int i = 1; i <= 100; i++) {
+            boolean dk = resultCondiTion.isResultCondition(i);
+            if (dk) {
+                Log.d("BBB",i + "");
+            }
+        }
+    }
+
     private void inSoChinhPhuong(){
         for (int i = 1; i <= 100; i++) {
             if (Math.sqrt(i) % 1 == 0){
