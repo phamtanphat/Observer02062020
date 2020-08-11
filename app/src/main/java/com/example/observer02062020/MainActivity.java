@@ -1,12 +1,19 @@
 package com.example.observer02062020;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.OnLifecycleEvent;
-
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,62 +21,38 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        Button button = new Button(this);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
-        inso(new OnListenValue() {
-            @Override
-            public boolean isResultCondition(int value) {
-                return value % 2 == 0;
-            }
-        });
-    }
 
-    // Chạy vòng lặp 1 - 100
-    // function inSoChan
-    // function inSoLe
-    // function inSoChia3Du1
-    // function inSoChinhPhuong (Căn của giá trị và phải là số nguyên)
+        Observable<String> stringObservable = Observable.just("Teo","Ti","Tun");
 
-    private void inSoChan(){
-        for (int i = 1; i <= 100; i++) {
-            if (i % 2 == 0){
-                Log.d("BBB",i + "");
-            }
-        }
-    }
-    private void inSoLe(){
-        for (int i = 1; i <= 100; i++) {
-            if (i % 2 == 1){
-                Log.d("BBB",i + "");
-            }
-        }
-    }
-    private void inSoChia3Du1(){
-        for (int i = 1; i <= 100; i++) {
-            if (i % 3 == 1){
-                Log.d("BBB",i + "");
-            }
-        }
-    }
-    private void inso(OnListenValue resultCondiTion){
-        for (int i = 1; i <= 100; i++) {
-            boolean dk = resultCondiTion.isResultCondition(i);
-            if (dk) {
-                Log.d("BBB",i + "");
-            }
-        }
-    }
+        stringObservable
+                .map(new Function<String,Integer>() {
+                    @Override
+                    public Integer apply(String s) throws Throwable {
+                        return 1;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Integer>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
 
-    private void inSoChinhPhuong(){
-        for (int i = 1; i <= 100; i++) {
-            if (Math.sqrt(i) % 1 == 0){
-                Log.d("BBB",i + "");
-            }
-        }
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Integer integer) {
+                        Toast.makeText(MainActivity.this, integer + "", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 }
